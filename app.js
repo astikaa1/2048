@@ -6,14 +6,36 @@ document.addEventListener('DOMContentLoaded', () =>{
     const width = 4;
     let squares = []
     let score = 0;
-    
+    colors = {
+        0:"#0B2330",
+		2: "#AFE1AF",
+		4: "#90EE90",
+		8: "#32CD32",
+		16: "#0FFF50",
+		32: "#39ff14", 
+		64: "#d1e231",
+		128: "#AAFF00", 
+		256: "#FFEA00", //orange
+		512: "#7cfc00", //brught green
+		1024: "#4CBB17", //green
+		2048: "#FFBF00"  //bright yellow
+	};
+    function setTiles(i, val){
+        squares[i].innerHTML = val
+        squares[i].style.backgroundColor = colors[val]
+
+        if(val == 0){
+            squares[i].style.color = colors[val]
+        }
+    }
     function createBoard(){
         for(let i=0; i<width*width;i++){
 
             square = document.createElement('span')
-            square.innerHTML = 0
-            gridDisplay.appendChild(square)
+            //square.innerHTML = 0
             squares.push(square)
+            setTiles(i,0)
+            gridDisplay.appendChild(square)
         }   
         generate()
         generate()
@@ -24,8 +46,7 @@ document.addEventListener('DOMContentLoaded', () =>{
     function generate(){
         let randomNumber = Math.floor(Math.random() * squares.length)
         if(squares[randomNumber].innerHTML == 0){
-            squares[randomNumber].innerHTML = 2
-            checkForGameOver()
+            setTiles(randomNumber,2)
         }else{
             generate()
         }
@@ -44,21 +65,24 @@ document.addEventListener('DOMContentLoaded', () =>{
                 let row = [parseInt(totalOne),parseInt(totalTwo),parseInt(totalThree),parseInt(totalFour) ]
                 let filteredRow = row.filter(num =>num)
 
-                console.log(row)
-                console.log(filteredRow)
+                // console.log(row)
+                // console.log(filteredRow)
 
                 let missing = 4 - filteredRow.length
                 let zeroes = Array(missing).fill(0)
-                console.log(zeroes)
+                // console.log(zeroes)
 
                 let newRow = zeroes.concat(filteredRow)
 
-                console.log(newRow)
-
-                squares[i].innerHTML =  newRow[0];
-                squares[i+1].innerHTML =  newRow[1];
-                squares[i+2].innerHTML =  newRow[2];
-                squares[i+3].innerHTML =  newRow[3];
+                // console.log(newRow)
+                setTiles(i,newRow[0])
+                setTiles(i+1,newRow[1])
+                setTiles(i+2,newRow[2])
+                setTiles(i+3,newRow[3])
+                // squares[i].innerHTML =  newRow[0];
+                // squares[i+1].innerHTML =  newRow[1];
+                // squares[i+2].innerHTML =  newRow[2];
+                // squares[i+3].innerHTML =  newRow[3];
 
             }
         }
@@ -88,10 +112,15 @@ document.addEventListener('DOMContentLoaded', () =>{
 
                 // console.log(newRow)
 
-                squares[i].innerHTML =  newRow[0];
-                squares[i+1].innerHTML =  newRow[1];
-                squares[i+2].innerHTML =  newRow[2];
-                squares[i+3].innerHTML =  newRow[3];
+                setTiles(i,newRow[0])
+                setTiles(i+1,newRow[1])
+                setTiles(i+2,newRow[2])
+                setTiles(i+3,newRow[3])
+
+                // squares[i].innerHTML =  newRow[0];
+                // squares[i+1].innerHTML =  newRow[1];
+                // squares[i+2].innerHTML =  newRow[2];
+                // squares[i+3].innerHTML =  newRow[3];
 
             }
         }
@@ -111,11 +140,15 @@ document.addEventListener('DOMContentLoaded', () =>{
             let zeroes = Array(missing).fill(0)
             let newColumn = zeroes.concat(filteredColumn)
 
+            setTiles(i,newColumn[0])
+            setTiles(i+width,newColumn[1])
+            setTiles(i+width*2,newColumn[2])
+            setTiles(i+width*3,newColumn[3])
 
-            squares[i].innerHTML = newColumn[0]
-            squares[i+width].innerHTML = newColumn[1]
-            squares[i+width*2].innerHTML = newColumn[2]
-            squares[i+ width*3].innerHTML = newColumn[3]
+            // squares[i].innerHTML = newColumn[0]
+            // squares[i+width].innerHTML = newColumn[1]
+            // squares[i+width*2].innerHTML = newColumn[2]
+            // squares[i+ width*3].innerHTML = newColumn[3]
         }
     }
 
@@ -134,10 +167,15 @@ document.addEventListener('DOMContentLoaded', () =>{
             let newColumn = filteredColumn.concat(zeroes)
 
 
-            squares[i].innerHTML = newColumn[0]
-            squares[i+width].innerHTML = newColumn[1]
-            squares[i+width*2].innerHTML = newColumn[2]
-            squares[i+ width*3].innerHTML = newColumn[3]
+            setTiles(i,newColumn[0])
+            setTiles(i+width,newColumn[1])
+            setTiles(i+width*2,newColumn[2])
+            setTiles(i+width*3,newColumn[3])
+
+            // squares[i].innerHTML = newColumn[0]
+            // squares[i+width].innerHTML = newColumn[1]
+            // squares[i+width*2].innerHTML = newColumn[2]
+            // squares[i+ width*3].innerHTML = newColumn[3]
         }
     }
 
@@ -149,28 +187,36 @@ document.addEventListener('DOMContentLoaded', () =>{
         for(let i=0;i<15;i++){
             if(squares[i].innerHTML === squares[i+1].innerHTML){
                 let combineTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+1].innerHTML)
-                squares[i].innerHTML = combineTotal
-                squares[i+1].innerHTML = 0;
+                setTiles(i,combineTotal)
+                setTiles(i+1,0)
+                
+                // squares[i].innerHTML = combineTotal
+                // squares[i+1].innerHTML = 0;
 
                 score += combineTotal
                 scoreDisplay.innerHTML = score
             }
         }
         checkForWin()
+        checkForGameOver()
     }
 
     function combineColumn(){
         for(let i=0;i<12;i++){
             if(squares[i].innerHTML === squares[i+width].innerHTML){
                 let combineTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+width].innerHTML)
-                squares[i].innerHTML = combineTotal
-                squares[i+width].innerHTML = 0;
+                setTiles(i,combineTotal)
+                setTiles(i+width,0)
+                
+                // squares[i].innerHTML = combineTotal
+                // squares[i+width].innerHTML = 0;
                 score += combineTotal
                 scoreDisplay.innerHTML = score
                 
             }
         }
         checkForWin()
+        checkForGameOver()
     }
 
     //assign keycode
